@@ -1,0 +1,24 @@
+server:
+  port: 8888
+spring:
+  profiles:
+    active: dev
+  application:
+    name: elm-gateway
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      routes: #配置路由路径
+        - id: product-service
+          uri: lb://elm-product
+          predicates:
+            - Path=/product-service/**
+          filters:
+            - StripPrefix=1
+      discovery:
+        locator:
+          enabled: true #开启从注册中心动态创建路由的功能
+          lower-case-service-id: true #使用小写服务名，默认是大写
